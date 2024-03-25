@@ -1,5 +1,6 @@
 import {AuthStateService} from "./auth-state.service";
 import {UserInfo} from "./user-info";
+import {TestObjectProvider} from "../../util/test-object-provider.spec";
 
 describe('AuthStateService', () => {
   it('isLoggedIn should return false as initial value', () => {
@@ -9,7 +10,7 @@ describe('AuthStateService', () => {
   });
 
   it('isLoggedIn should return true if user is authenticated', () => {
-    const userInfo: UserInfo = {email: "", idToken: "", refreshToken: "", createdAt: "", expiresIn: ""}
+    const userInfo: UserInfo = TestObjectProvider.userInfo()
     const service = new AuthStateService();
     service.authenticate(userInfo)
 
@@ -17,7 +18,7 @@ describe('AuthStateService', () => {
   });
 
   it('isLoggedIn should return false if user is invalidated after being logged in', () => {
-    const userInfo: UserInfo = {email: "", idToken: "", refreshToken: "", createdAt: "", expiresIn: ""}
+    const userInfo: UserInfo = TestObjectProvider.userInfo()
     const service = new AuthStateService();
     service.authenticate(userInfo)
     service.invalidate()
@@ -32,7 +33,7 @@ describe('AuthStateService', () => {
   });
 
   it('userInfo should return userInfo if user is authenticated', () => {
-    const userInfo: UserInfo = {email: "", idToken: "", refreshToken: "", createdAt: "", expiresIn: ""}
+    const userInfo: UserInfo = TestObjectProvider.userInfo()
     const service = new AuthStateService();
     service.authenticate(userInfo)
 
@@ -40,8 +41,8 @@ describe('AuthStateService', () => {
   });
 
   it('authenticate should update userInfo with given value', () => {
-    const firstUserInfo: UserInfo = {email: "first", idToken: "", refreshToken: "", createdAt: "", expiresIn: ""}
-    const secondUserInfo: UserInfo = {email: "second", idToken: "", refreshToken: "", createdAt: "", expiresIn: ""}
+    const firstUserInfo: UserInfo = TestObjectProvider.userInfo()
+    const secondUserInfo: UserInfo = TestObjectProvider.userInfoWithEmail("another@email.com")
     const service = new AuthStateService();
     service.authenticate(firstUserInfo)
     service.authenticate(secondUserInfo)
