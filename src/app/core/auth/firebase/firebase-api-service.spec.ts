@@ -2,7 +2,7 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {TestBed} from "@angular/core/testing";
 import {HttpClient} from "@angular/common/http";
 import {FirebaseApiService} from "./firebase-api.service";
-import {RefreshTokenResponse, SignInResponse, SignUpResponse} from "./firebase-api";
+import {RefreshTokenResponse, LoginResponse, SignUpResponse} from "./firebase-api";
 import {FirebaseUrlProvider} from "./url/firebase-url-provider";
 import {TestConstants, TestObjectProvider} from "../../../util/test-object-provider.spec";
 
@@ -39,12 +39,12 @@ describe('FirebaseApiService', () => {
   });
 
   it('should send valid firebase sign in request', () => {
-    const expectedResponse: SignInResponse = TestObjectProvider.signInResponse()
+    const expectedResponse: LoginResponse = TestObjectProvider.loginResponse()
 
-    firebaseApiService.signIn({email: TestConstants.TEST_EMAIL, password: TestConstants.TEST_PASSWORD, returnToken: true})
+    firebaseApiService.login({email: TestConstants.TEST_EMAIL, password: TestConstants.TEST_PASSWORD, returnToken: true})
       .subscribe(response => expect(response).toEqual(expectedResponse))
 
-    const result = httpTestingController.expectOne(FirebaseUrlProvider.signIn());
+    const result = httpTestingController.expectOne(FirebaseUrlProvider.login());
 
     expect(result.request.method).toEqual('POST');
 

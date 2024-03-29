@@ -25,7 +25,7 @@ export interface SignUpResponse {
   localId: string
 }
 
-export interface SignInResponse {
+export interface LoginResponse {
   idToken: string
   email: string
   refreshToken: string

@@ -8,17 +8,17 @@ import {
 describe('IdentityToolkitUrl', () => {
   it('should throw InvalidArgumentsError if apiKey is empty', () => {
     expect(function () {
-      new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.SIGN_IN_WITH_CUSTOM_TOKEN, "");
+      new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.LOGIN_WITH_CUSTOM_TOKEN, "");
     }).toThrow(new InvalidArgumentsError(`ApiKey passed is not truthy: apikey=.`));
   });
 
-  it('should return a valid identity toolkit url with custom token sign in action', () => {
-    const url = new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.SIGN_IN_WITH_CUSTOM_TOKEN, environment.FIREBASE_API_KEY);
+  it('should return a valid identity toolkit url with custom token login action', () => {
+    const url = new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.LOGIN_WITH_CUSTOM_TOKEN, environment.FIREBASE_API_KEY);
     expect(url.toString()).toEqual("https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=" + environment.FIREBASE_API_KEY)
   });
 
-  it('should return a valid identity toolkit url with password sign in action', () => {
-    const url = new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.SIGN_IN_WITH_PASSWORD, environment.FIREBASE_API_KEY);
+  it('should return a valid identity toolkit url with password login action', () => {
+    const url = new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.LOGIN_WITH_PASSWORD, environment.FIREBASE_API_KEY);
     expect(url.toString()).toEqual("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + environment.FIREBASE_API_KEY)
   });
 

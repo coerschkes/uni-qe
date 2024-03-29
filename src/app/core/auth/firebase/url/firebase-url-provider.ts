@@ -3,8 +3,8 @@ import {environment} from "../../../../../environments/environment";
 import {SecureTokenDomain, SecureTokenUrl} from "./secure-token-url";
 
 export class FirebaseUrlProvider {
-  public static signIn(): string {
-    return new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.SIGN_IN_WITH_CUSTOM_TOKEN, environment.FIREBASE_API_KEY).toString()
+  public static login(): string {
+    return new IdentityToolkitUrl(IdentityToolkitDomain.ACCOUNTS, IdentityToolkitActions.LOGIN_WITH_CUSTOM_TOKEN, environment.FIREBASE_API_KEY).toString()
   }
 
   public static signUp(): string {

@@ -1,4 +1,4 @@
-import {RefreshTokenResponse, SignInResponse, SignUpResponse} from "../core/auth/firebase/firebase-api";
+import {RefreshTokenResponse, LoginResponse, SignUpResponse} from "../core/auth/firebase/firebase-api";
 import {UserInfo} from "../core/auth/user-info";
 
 export enum TestConstants {
@@ -29,7 +29,7 @@ export class TestObjectProvider {
     }
   }
 
-  public static signInResponse(): SignInResponse {
+  public static loginResponse(): LoginResponse {
     return {
       email: TestConstants.TEST_EMAIL.toString(),
       expiresInSeconds: TestConstants.TEST_EXPIRED_IN.toString(),

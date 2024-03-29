@@ -10,10 +10,10 @@ describe('AuthService', () => {
   let mockFirebaseApiService: any;
   let mockAuthStateService: any;
 
-  beforeEach(() => {
-    mockFirebaseApiService = jasmine.createSpyObj('firebaseApiService', ['signUp', 'signIn', 'refreshToken']);
+  beforeEach(async () => {
+    mockFirebaseApiService = jasmine.createSpyObj('firebaseApiService', ['signUp', 'login', 'refreshToken']);
     mockAuthStateService = jasmine.createSpyObj('firebaseApiService', ['authenticate', 'buildUserInfo']);
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       providers: [
         AuthService,
         {provide: AuthStateService, useValue: mockAuthStateService},
@@ -53,14 +53,14 @@ describe('AuthService', () => {
     expect(mockAuthStateService.authenticate).not.toHaveBeenCalled()
   })
 
-  it('should call authenticate if signIn call to firebase api is successful', () => {
-    const expectedSignInResponse = TestObjectProvider.signInResponse()
-    mockFirebaseApiService.signIn.and.returnValue(new Observable(subscriber => subscriber.next(expectedSignInResponse)))
+  it('should call authenticate if login call to firebase api is successful', () => {
+    const expectedLoginResponse = TestObjectProvider.loginResponse()
+    mockFirebaseApiService.login.and.returnValue(new Observable(subscriber => subscriber.next(expectedLoginResponse)))
 
-    service.signIn(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
+    service.login(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
       .subscribe(value => {
-        expect(value).toEqual(expectedSignInResponse)
-        expect(mockFirebaseApiService.signIn).toHaveBeenCalled()
+        expect(value).toEqual(expectedLoginResponse)
+        expect(mockFirebaseApiService.login).toHaveBeenCalled()
         expect(mockAuthStateService.authenticate).toHaveBeenCalledWith(jasmine.objectContaining({
           idToken: value.idToken,
           email: value.email,
@@ -70,11 +70,11 @@ describe('AuthService', () => {
       })
   })
 
-  it('should not call authenticate if signIn call to firebase throws error', () => {
-    mockFirebaseApiService.signIn.and.throwError(new Error())
+  it('should not call authenticate if login call to firebase throws error', () => {
+    mockFirebaseApiService.login.and.throwError(new Error())
 
-    expect(() => service.signIn(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)).toThrow(new Error())
-    expect(mockFirebaseApiService.signIn).toHaveBeenCalled()
+    expect(() => service.login(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)).toThrow(new Error())
+    expect(mockFirebaseApiService.login).toHaveBeenCalled()
     expect(mockAuthStateService.authenticate).not.toHaveBeenCalled()
   })
 });

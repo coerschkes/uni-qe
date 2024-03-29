@@ -8,8 +8,8 @@ export enum IdentityToolkitDomain {
 
 export enum IdentityToolkitActions {
   SIGN_UP = "signUp",
-  SIGN_IN_WITH_PASSWORD = "signInWithPassword",
-  SIGN_IN_WITH_CUSTOM_TOKEN = "signInWithCustomToken",
+  LOGIN_WITH_PASSWORD = "signInWithPassword",
+  LOGIN_WITH_CUSTOM_TOKEN = "signInWithCustomToken",
 }
 
 export class IdentityToolkitUrl {

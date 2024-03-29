@@ -4,7 +4,7 @@ import {
   BasicAuthenticationPayload,
   RefreshTokenPayload,
   RefreshTokenResponse,
-  SignInResponse,
+  LoginResponse,
   SignUpResponse
 } from "./firebase-api";
 import {FirebaseUrlProvider} from "./url/firebase-url-provider";
@@ -21,11 +21,11 @@ export class FirebaseApiService {
     return this._httpClient.post<SignUpResponse>(FirebaseUrlProvider.signUp(), payload)
   }
 
-  public signIn(payload: BasicAuthenticationPayload) {
-    return this._httpClient.post<SignInResponse>(FirebaseUrlProvider.signIn(), payload)
+  public login(payload: BasicAuthenticationPayload) {
+    return this._httpClient.post<LoginResponse>(FirebaseUrlProvider.login(), payload)
   }
 
-  public refreshToken(payload: RefreshTokenPayload){
+  public refreshToken(payload: RefreshTokenPayload) {
     return this._httpClient.post<RefreshTokenResponse>(FirebaseUrlProvider.refreshToken(), payload)
   }
 
