@@ -18,10 +18,12 @@ import {Router} from "@angular/router";
 export class AuthComponent {
   private readonly authService: AuthService;
   private readonly authComponentStateService: AuthComponentStateService;
+  private readonly router: Router;
 
-  constructor(authService: AuthService, authComponentStateService: AuthComponentStateService) {
+  constructor(authService: AuthService, authComponentStateService: AuthComponentStateService, router: Router) {
     this.authService = authService;
     this.authComponentStateService = authComponentStateService;
+    this.router = router;
   }
 
   onSwitchMode() {
@@ -44,17 +46,19 @@ export class AuthComponent {
   }
 
   login(email: string, password: string) {
-    //todo: redirect
     //todo: error handling
     //todo: set is loading when not complete
-    this.authService.login(email, password);
+    this.authService.login(email, password).subscribe({
+      next: () => this.router.navigate(['/dashboard'])
+    });
   }
 
   signUp(email: string, password: string) {
-    //todo: redirect
     //todo: error handling
     //todo: set is loading when not complete
-    this.authService.signUp(email, password);
+    this.authService.signUp(email, password).subscribe({
+      next: () => this.router.navigate(['/dashboard'])
+    });
   }
 
   get loginMode(): boolean {
