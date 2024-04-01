@@ -8,8 +8,9 @@ import {AuthService} from "./auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {TestConstants, TestObjectProvider} from "../../util/test-object-provider.spec";
 import {LoginResponse, SignUpResponse} from "./firebase/firebase-api";
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {Router} from "@angular/router";
+import {NgForm} from "@angular/forms";
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
@@ -72,12 +73,42 @@ describe('AuthComponent', () => {
     component.signUp(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard'])
   });
+
+  it('should reset the state service if the authForm is valid and the signup is successful', () => {
+    mockAuthService.signUp.and.returnValue(mockSignUpResponse())
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.authForm()).toBeUndefined();
+  })
+
+  it('should reset the state service if the authForm is valid and the login is successful', () => {
+    stateService.switchLoginMode()
+    mockAuthService.login.and.returnValue(mockSignUpResponse())
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.authForm()).toBeUndefined();
+  })
+
+  it('should not reset the state service if the authForm is valid but the signup is not successful', () => {
+    mockAuthService.signUp.and.returnValue(throwError(() => 'test'))
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.authForm()).toEqual(form)
+  });
+
+  it('should not reset the state service if the authForm is valid but the login is not successful', () => {
+    stateService.switchLoginMode()
+    mockAuthService.login.and.returnValue(throwError(() => 'test'))
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.authForm()).toEqual(form)
+  });
 });
 
 function mockLoginResponse(): Observable<LoginResponse> {
   return new Observable<LoginResponse>(subscriber => subscriber.next(TestObjectProvider.loginResponse()));
 }
 
-function mockSignUpResponse(): Observable<SignUpResponse>{
+function mockSignUpResponse(): Observable<SignUpResponse> {
   return new Observable<SignUpResponse>(subscriber => subscriber.next(TestObjectProvider.signUpResponse()))
 }

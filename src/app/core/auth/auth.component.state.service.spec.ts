@@ -1,5 +1,6 @@
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {TestBed} from "@angular/core/testing";
+import {NgForm} from "@angular/forms";
 
 
 describe("AuthComponentStateService", () => {
@@ -21,6 +22,10 @@ describe("AuthComponentStateService", () => {
     expect(service.isLoginMode()).toBeFalse()
   });
 
+  it('should initialize with authForm() SOMETHING-HERE', () =>{
+    expect(service.authForm()).toBeUndefined()
+  })
+
   it('should reverse isLoading on switchLoading()', () => {
     service.switchLoading()
     expect(service.isLoading()).toBeTrue()
@@ -40,8 +45,10 @@ describe("AuthComponentStateService", () => {
   it('should reset to initial state on reset()', () => {
     service.switchLoading()
     service.switchLoginMode()
+    service.authForm = new NgForm([], []);
     service.reset()
     expect(service.isLoading()).toBeFalse()
     expect(service.isLoginMode()).toBeFalse()
+    expect(service.authForm()).toBeUndefined()
   });
 })
