@@ -1,7 +1,7 @@
 import {AuthService} from "./auth.service";
 import {TestBed} from "@angular/core/testing";
 import {AuthStateService} from "./auth-state.service";
-import {FirebaseApiService} from "./firebase/firebase-api.service";
+import {FirebaseApiService} from "../external/firebase/firebase-api.service";
 import {Observable} from "rxjs";
 import {TestConstants, TestObjectProvider} from "../../util/test-object-provider.spec";
 

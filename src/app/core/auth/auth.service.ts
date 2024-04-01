@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
-import {FirebaseApiService} from "./firebase/firebase-api.service";
+import {FirebaseApiService} from "../external/firebase/firebase-api.service";
 import {tap} from "rxjs";
 import {AuthStateService} from "./auth-state.service";
 import {UserInfo} from "./user-info";
-import {LoginResponse, SignUpResponse} from "./firebase/firebase-api";
+import {LoginResponse, SignUpResponse} from "../external/firebase/firebase-api";
 
 @Injectable({providedIn: "root"})
 export class AuthService {

@@ -1,4 +1,4 @@
-import {RefreshTokenResponse, LoginResponse, SignUpResponse} from "../core/auth/firebase/firebase-api";
+import {RefreshTokenResponse, LoginResponse, SignUpResponse} from "../core/external/firebase/firebase-api";
 import {UserInfo} from "../core/auth/user-info";
 
 export enum TestConstants {

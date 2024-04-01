@@ -7,7 +7,7 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {AuthService} from "../auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {TestConstants, TestObjectProvider} from "../../../util/test-object-provider.spec";
-import {LoginResponse, SignUpResponse} from "../firebase/firebase-api";
+import {LoginResponse, SignUpResponse} from "../../external/firebase/firebase-api";
 import {Observable, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
