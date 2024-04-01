@@ -32,13 +32,15 @@ export class AuthComponent {
   }
 
   onSubmit(authForm: NgForm) {
-    this.authComponentStateService.authForm = authForm
-    const email: string = authForm.value.email
-    const password: string = authForm.value.password
-    if (this.authComponentStateService.isLoginMode()) {
-      this.login(email, password)
-    } else {
-      this.signUp(email, password)
+    if (authForm.valid) {
+      this.authComponentStateService.authForm = authForm
+      const email: string = authForm.value.email
+      const password: string = authForm.value.password
+      if (this.authComponentStateService.isLoginMode()) {
+        this.login(email, password)
+      } else {
+        this.signUp(email, password)
+      }
     }
   }
 

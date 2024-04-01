@@ -103,6 +103,14 @@ describe('AuthComponent', () => {
     component.onSubmit(form)
     expect(stateService.authForm()).toEqual(form)
   });
+
+  it('should not interact with the auth service if the authForm is not valid', () => {
+    mockAuthService.signUp.and.returnValue(throwError(() => 'test'))
+    const form = new NgForm([], [])
+    form.control.setErrors({'incorrect': true})
+    component.onSubmit(form)
+    expect(mockAuthService.signUp).not.toHaveBeenCalled()
+  })
 });
 
 function mockLoginResponse(): Observable<LoginResponse> {
