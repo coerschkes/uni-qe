@@ -18,14 +18,14 @@ import {catchError, finalize, first, Observable, of, tap} from "rxjs";
 })
 //todo: style
 export class AuthComponent {
-  private readonly authService: AuthService;
-  private readonly authComponentStateService: AuthComponentStateService;
-  private readonly router: Router;
+  private readonly authService: AuthService
+  private readonly authComponentStateService: AuthComponentStateService
+  private readonly router: Router
 
   constructor(authService: AuthService, authComponentStateService: AuthComponentStateService, router: Router) {
-    this.authService = authService;
-    this.authComponentStateService = authComponentStateService;
-    this.router = router;
+    this.authService = authService
+    this.authComponentStateService = authComponentStateService
+    this.router = router
   }
 
   onSwitchMode() {
@@ -49,8 +49,8 @@ export class AuthComponent {
   login(email: string, password: string) {
     this.authenticationFlow(this.authService.login(email, password),
       () => {
-        this.authComponentStateService.reset();
-        this.router.navigate(['/dashboard']);
+        this.authComponentStateService.reset()
+        this.router.navigate(['/dashboard'])
       },
     )
   }
@@ -58,7 +58,7 @@ export class AuthComponent {
   signUp(email: string, password: string) {
     this.authenticationFlow(this.authService.signUp(email, password),
       () => {
-        this.authComponentStateService.reset();
+        this.authComponentStateService.reset()
         this.authComponentStateService.switchLoginMode()
       },
     )
@@ -68,14 +68,14 @@ export class AuthComponent {
     return this.authComponentStateService.isLoginMode()
   }
 
-  private authenticationFlow(observable: Observable<any>, tapFn: () => void): void {
+  private authenticationFlow(observable: Observable<any>, nextCallback: () => void): void {
     observable
       .pipe(
         first(),
-        tap(tapFn),
+        tap(nextCallback),
         catchError(err => {
             //todo: show error on component
-            console.log("test")
+            console.log(err)
             return of()
           },
         ),
