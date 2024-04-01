@@ -21,6 +21,7 @@ export class FirebaseApiService {
     return this._httpClient.post<SignUpResponse>(FirebaseUrlProvider.signUp(), payload)
   }
 
+  //todo: add login with token
   public login(payload: BasicAuthenticationPayload) {
     return this._httpClient.post<LoginResponse>(FirebaseUrlProvider.login(), payload)
   }
