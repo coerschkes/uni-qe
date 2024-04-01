@@ -22,16 +22,16 @@ describe("AuthComponentStateService", () => {
     expect(service.isLoginMode()).toBeFalse()
   });
 
-  it('should initialize with authForm() SOMETHING-HERE', () =>{
+  it('should initialize with authForm() undefined', () =>{
     expect(service.authForm()).toBeUndefined()
   })
 
-  it('should reverse isLoading on switchLoading()', () => {
+  it('should revert isLoading on switchLoading()', () => {
     service.switchLoading()
     expect(service.isLoading()).toBeTrue()
   });
 
-  it('should reverse isLoginMode on switchLoginMode()', () => {
+  it('should revert isLoginMode on switchLoginMode()', () => {
     service.switchLoginMode()
     expect(service.isLoginMode()).toBeTrue()
   });
