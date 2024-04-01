@@ -12,30 +12,19 @@ import {Observable, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
 
+let component: AuthComponent;
+let fixture: ComponentFixture<AuthComponent>;
+let httpClient: HttpClient;
+let httpTestingController: HttpTestingController;
+let stateService: any;
+let mockAuthService: any;
+let mockRouter: any;
+
 describe('AuthComponent', () => {
-  let component: AuthComponent;
-  let stateService: AuthComponentStateService;
-  let fixture: ComponentFixture<AuthComponent>;
-  let httpClient: HttpClient;
-  let httpTestingController: HttpTestingController;
-  let mockAuthService: any;
-  let mockRouter: any;
 
   beforeEach(async () => {
-    mockAuthService = jasmine.createSpyObj('authService', ['login', 'signUp']);
-    mockRouter = jasmine.createSpyObj('router', ['navigate'])
-    await TestBed.configureTestingModule({
-      providers: [{provide: AuthService, useValue: mockAuthService}, {provide: Router, useValue: mockRouter}],
-      imports: [AuthComponent, HttpClientTestingModule]
-    })
-      .compileComponents();
-
-    fixture = TestBed.createComponent(AuthComponent);
-    component = fixture.componentInstance;
-    httpClient = TestBed.inject(HttpClient);
-    httpTestingController = TestBed.inject(HttpTestingController);
+    await configureTestBed()
     stateService = TestBed.inject(AuthComponentStateService)
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -68,10 +57,13 @@ describe('AuthComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard'])
   });
 
-  it('should redirect to dashboard if signUp() with email and password is successful', () => {
+  //todo: test for showing congrats message when registering, "redirect" to login
+  //      for now: switch to login, reset all and use login flow
+  it('should switch to login mode if signUp() with email and password is successful', () => {
     mockAuthService.signUp.and.returnValue(mockSignUpResponse())
     component.signUp(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard'])
+    expect(stateService.isLoginMode()).toBeTrue()
+    expect(mockRouter.navigate).not.toHaveBeenCalledWith(['/dashboard'])
   });
 
   it('should reset the state service if the authForm is valid and the signup is successful', () => {
@@ -111,7 +103,81 @@ describe('AuthComponent', () => {
     component.onSubmit(form)
     expect(mockAuthService.signUp).not.toHaveBeenCalled()
   })
+
+  it('should switch the loading state when calling the auth service in signUp()', async () => {
+    TestBed.resetTestingModule()
+    stateService = jasmine.createSpyObj('authComponentStateService', ['switchLoading', 'isLoginMode', 'reset'])
+    await configureTestBed({provide: AuthComponentStateService, useValue: stateService})
+
+    stateService.isLoginMode.and.returnValue(false)
+    mockAuthService.signUp.and.returnValue(mockSignUpResponse())
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.switchLoading).toHaveBeenCalledTimes(2)
+  });
+
+  it('should switch the loading state when calling the auth service in signUp() with err', async () => {
+    TestBed.resetTestingModule()
+    stateService = jasmine.createSpyObj('authComponentStateService', ['switchLoading', 'isLoginMode', 'reset'])
+    await configureTestBed({provide: AuthComponentStateService, useValue: stateService})
+
+    stateService.isLoginMode.and.returnValue(false)
+    mockAuthService.signUp.and.returnValue(throwError(() => 'test'))
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.switchLoading).toHaveBeenCalledTimes(2)
+    expect(stateService.reset).not.toHaveBeenCalled()
+  })
+
+  it('should switch the loading state when calling the auth service in login()', async () => {
+    TestBed.resetTestingModule()
+    stateService = jasmine.createSpyObj('authComponentStateService', ['switchLoading', 'isLoginMode', 'reset'])
+    await configureTestBed({provide: AuthComponentStateService, useValue: stateService})
+
+    stateService.isLoginMode.and.returnValue(true)
+    mockAuthService.login.and.returnValue(mockSignUpResponse())
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.switchLoading).toHaveBeenCalledTimes(2)
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard'])
+  });
+
+  it('should switch the loading state when calling the auth service in login() with err', async () => {
+    TestBed.resetTestingModule()
+    stateService = jasmine.createSpyObj('authComponentStateService', ['switchLoading', 'isLoginMode', 'reset'])
+    await configureTestBed({provide: AuthComponentStateService, useValue: stateService})
+
+    stateService.isLoginMode.and.returnValue(true)
+    mockAuthService.login.and.returnValue(throwError(() => 'test'))
+    const form = new NgForm([], []);
+    component.onSubmit(form)
+    expect(stateService.switchLoading).toHaveBeenCalledTimes(2)
+    expect(stateService.reset).not.toHaveBeenCalled()
+  })
 });
+
+async function configureTestBed(stateServiceProvider?: any) {
+  mockAuthService = jasmine.createSpyObj('authService', ['login', 'signUp']);
+  mockRouter = jasmine.createSpyObj('router', ['navigate'])
+  let providers: any[] = [
+    {provide: AuthService, useValue: mockAuthService},
+    {provide: Router, useValue: mockRouter}
+  ]
+  if (stateServiceProvider !== undefined) {
+    providers.push(stateServiceProvider)
+  }
+  await TestBed.configureTestingModule({
+    providers: providers,
+    imports: [AuthComponent, HttpClientTestingModule]
+  })
+    .compileComponents();
+
+  fixture = TestBed.createComponent(AuthComponent);
+  component = fixture.componentInstance;
+  httpClient = TestBed.inject(HttpClient);
+  httpTestingController = TestBed.inject(HttpTestingController);
+  fixture.detectChanges();
+}
 
 function mockLoginResponse(): Observable<LoginResponse> {
   return new Observable<LoginResponse>(subscriber => subscriber.next(TestObjectProvider.loginResponse()));

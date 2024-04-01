@@ -5,6 +5,7 @@ import {FormsModule, NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {Router} from "@angular/router";
+import {catchError, finalize, first, map, of, take} from "rxjs";
 
 @Component({
   selector: 'app-auth',
@@ -33,6 +34,7 @@ export class AuthComponent {
 
   onSubmit(authForm: NgForm) {
     if (authForm.valid) {
+      this.authComponentStateService.switchLoading()
       this.authComponentStateService.authForm = authForm
       const email: string = authForm.value.email
       const password: string = authForm.value.password
@@ -45,32 +47,45 @@ export class AuthComponent {
   }
 
   login(email: string, password: string) {
-    //todo: set is loading when not complete
-    this.authService.login(email, password).subscribe({
-      next: () => {
-        this.authComponentStateService.reset();
-        this.router.navigate(['/dashboard']);
-      },
-      error: err => {
-        //todo: handle error here -> mapper?
-        console.log(err)
-      }
-    });
+    this.authService.login(email, password)
+      .pipe(
+        first(),
+        map(value => {
+            this.authComponentStateService.reset();
+            this.router.navigate(['/dashboard']);
+          }
+        ),
+        catchError(err => {
+            //todo: show error on component
+            console.log("test")
+            return of()
+          },
+        ),
+        finalize(() => {
+          this.authComponentStateService.switchLoading()
+        }),
+      ).subscribe()
   }
 
   signUp(email: string, password: string) {
-    //todo: set is loading when not complete
     this.authService.signUp(email, password)
-      .subscribe({
-        next: () => {
-          this.authComponentStateService.reset();
-          this.router.navigate(['/dashboard']);
-        },
-        error: err => {
-          //todo: handle error here -> mapper?
-          console.log(err)
-        }
-      });
+      .pipe(
+        first(),
+        map(value => {
+            this.authComponentStateService.reset();
+            this.authComponentStateService.switchLoginMode()
+          }
+        ),
+        catchError(err => {
+          //todo: show error on component
+            console.log("test")
+            return of()
+          },
+        ),
+        finalize(() => {
+          this.authComponentStateService.switchLoading()
+        }),
+      ).subscribe()
   }
 
   get loginMode(): boolean {
