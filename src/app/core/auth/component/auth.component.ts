@@ -2,7 +2,7 @@
 
 import {Component} from '@angular/core';
 import {FormsModule, NgForm} from "@angular/forms";
-import {AuthService} from "./auth.service";
+import {AuthService} from "../auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {Router} from "@angular/router";
 import {catchError, finalize, first, Observable, of, tap} from "rxjs";
