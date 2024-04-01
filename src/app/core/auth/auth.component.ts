@@ -5,7 +5,7 @@ import {FormsModule, NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {Router} from "@angular/router";
-import {catchError, finalize, first, map, of, take} from "rxjs";
+import {catchError, finalize, first, Observable, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-auth',
@@ -47,14 +47,32 @@ export class AuthComponent {
   }
 
   login(email: string, password: string) {
-    this.authService.login(email, password)
+    this.authenticationFlow(this.authService.login(email, password),
+      () => {
+        this.authComponentStateService.reset();
+        this.router.navigate(['/dashboard']);
+      },
+    )
+  }
+
+  signUp(email: string, password: string) {
+    this.authenticationFlow(this.authService.signUp(email, password),
+      () => {
+        this.authComponentStateService.reset();
+        this.authComponentStateService.switchLoginMode()
+      },
+    )
+  }
+
+  get loginMode(): boolean {
+    return this.authComponentStateService.isLoginMode()
+  }
+
+  private authenticationFlow(observable: Observable<any>, tapFn: () => void): void {
+    observable
       .pipe(
         first(),
-        map(value => {
-            this.authComponentStateService.reset();
-            this.router.navigate(['/dashboard']);
-          }
-        ),
+        tap(tapFn),
         catchError(err => {
             //todo: show error on component
             console.log("test")
@@ -65,30 +83,5 @@ export class AuthComponent {
           this.authComponentStateService.switchLoading()
         }),
       ).subscribe()
-  }
-
-  signUp(email: string, password: string) {
-    this.authService.signUp(email, password)
-      .pipe(
-        first(),
-        map(value => {
-            this.authComponentStateService.reset();
-            this.authComponentStateService.switchLoginMode()
-          }
-        ),
-        catchError(err => {
-          //todo: show error on component
-            console.log("test")
-            return of()
-          },
-        ),
-        finalize(() => {
-          this.authComponentStateService.switchLoading()
-        }),
-      ).subscribe()
-  }
-
-  get loginMode(): boolean {
-    return this.authComponentStateService.isLoginMode()
   }
 }
