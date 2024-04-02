@@ -11,7 +11,6 @@ import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/mater
 import {MatError, MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {MatInput} from "@angular/material/input";
-import {NgIf} from "@angular/common";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -34,7 +33,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     MatHint,
     MatLabel,
     MatInput,
-    NgIf
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'
@@ -109,7 +107,7 @@ export class AuthComponent {
       ).subscribe()
   }
 
-  public log(form: NgForm):void{
+  public log(form: NgForm): void {
     console.log(form)
   }
 }

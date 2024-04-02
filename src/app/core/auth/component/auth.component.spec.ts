@@ -11,6 +11,7 @@ import {BasicLoginResponse, SignUpResponse} from "../../external/firebase/fireba
 import {Observable, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
+import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 
 let component: AuthComponent;
 let fixture: ComponentFixture<AuthComponent>;
@@ -168,7 +169,7 @@ async function configureTestBed(stateServiceProvider?: any) {
   }
   await TestBed.configureTestingModule({
     providers: providers,
-    imports: [AuthComponent, HttpClientTestingModule]
+    imports: [AuthComponent, HttpClientTestingModule, NoopAnimationsModule]
   })
     .compileComponents();
 
