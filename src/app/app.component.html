@@ -1,4 +1,8 @@
 <div>
-  <h1>{{ title }}</h1>
-  <router-outlet></router-outlet>
+  @if (isLoggedIn()) {
+    <h1>{{ title }}</h1>
+    <router-outlet></router-outlet>
+  } @else {
+    <router-outlet></router-outlet>
+  }
 </div>
