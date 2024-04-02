@@ -7,5 +7,7 @@ export const routes: Routes = [
   {path: 'auth', component: AuthComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [LoginGuard.canActivate]},
   {path: '', component: DashboardComponent, canActivate: [LoginGuard.canActivate]},
-  { path: '**', redirectTo: 'dashboard'}
+  {path: '**', redirectTo: 'dashboard'}
 ];
+//todo: add page not found component and add back to root button / redirect in ... seconds to root
+//todo: test routing

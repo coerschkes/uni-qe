@@ -7,7 +7,7 @@ export interface BasicAuthenticationPayload {
   returnToken: boolean
 }
 
-export interface TokenAuthenticationPayload{
+export interface TokenAuthenticationPayload {
   token: string
   returnSecureToken: boolean
 }
@@ -30,7 +30,7 @@ export interface SignUpResponse {
   localId: string
 }
 
-export interface TokenLoginResponse{
+export interface TokenLoginResponse {
   idToken: string
   refreshToken: string
   expiresInSeconds: string
@@ -54,3 +54,6 @@ export interface RefreshTokenResponse {
   tokenType: string
   expiresInSeconds: string
 }
+
+
+//todo: Add error responses -> as possible return values? maybe <response1 | errorresponse1> ... and switch impls?
