@@ -3,6 +3,7 @@ import {RouterOutlet} from '@angular/router';
 import {environment} from "../environments/environment";
 import {AuthStateService} from "./core/auth/auth-state.service";
 
+//todo: rename this project
 @Component({
   selector: 'app-root',
   standalone: true,
