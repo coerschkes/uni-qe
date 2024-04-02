@@ -2,7 +2,7 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {TestBed} from "@angular/core/testing";
 import {HttpClient} from "@angular/common/http";
 import {FirebaseApiService} from "./firebase-api.service";
-import {RefreshTokenResponse, LoginResponse, SignUpResponse} from "./firebase-api";
+import {RefreshTokenResponse, BasicLoginResponse, SignUpResponse, TokenLoginResponse} from "./firebase-api";
 import {FirebaseUrlProvider} from "./url/firebase-url-provider";
 import {TestConstants, TestObjectProvider} from "../../../util/test-object-provider.spec";
 
@@ -38,13 +38,26 @@ describe('FirebaseApiService', () => {
     result.flush(expectedResponse);
   });
 
-  it('should send valid firebase sign in request', () => {
-    const expectedResponse: LoginResponse = TestObjectProvider.loginResponse()
+  it('should send valid firebase sign in request with email and password', () => {
+    const expectedResponse: BasicLoginResponse = TestObjectProvider.basicLoginResponse()
 
-    firebaseApiService.login({email: TestConstants.TEST_EMAIL, password: TestConstants.TEST_PASSWORD, returnToken: true})
+    firebaseApiService.basicLogin({email: TestConstants.TEST_EMAIL, password: TestConstants.TEST_PASSWORD, returnToken: true})
       .subscribe(response => expect(response).toEqual(expectedResponse))
 
-    const result = httpTestingController.expectOne(FirebaseUrlProvider.login());
+    const result = httpTestingController.expectOne(FirebaseUrlProvider.basicLogin());
+
+    expect(result.request.method).toEqual('POST');
+
+    result.flush(expectedResponse);
+  });
+
+  it('should send valid firebase sign in request with token', () => {
+    const expectedResponse: TokenLoginResponse = TestObjectProvider.tokenLoginResponse()
+
+    firebaseApiService.tokenLogin({token: TestConstants.TEST_SECURE_TOKEN, returnSecureToken: true})
+      .subscribe(response => expect(response).toEqual(expectedResponse))
+
+    const result = httpTestingController.expectOne(FirebaseUrlProvider.tokenLogin());
 
     expect(result.request.method).toEqual('POST');
 

@@ -7,7 +7,7 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {AuthService} from "../auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
 import {TestConstants, TestObjectProvider} from "../../../util/test-object-provider.spec";
-import {LoginResponse, SignUpResponse} from "../../external/firebase/firebase-api";
+import {BasicLoginResponse, SignUpResponse} from "../../external/firebase/firebase-api";
 import {Observable, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
@@ -39,10 +39,10 @@ describe('AuthComponent', () => {
     expect(stateService.isLoginMode()).toBeFalse()
   });
 
-  it('should call login on authService on login() with email and password', () => {
-    mockAuthService.login.and.returnValue(mockLoginResponse())
-    component.login(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
-    expect(mockAuthService.login).toHaveBeenCalledWith(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
+  it('should call basicLogin on authService on basicLogin() with email and password', () => {
+    mockAuthService.basicLogin.and.returnValue(mockLoginResponse())
+    component.basicLogin(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
+    expect(mockAuthService.basicLogin).toHaveBeenCalledWith(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
   });
 
   it('should call signUp on authService on signUp() with email and password', () => {
@@ -51,9 +51,9 @@ describe('AuthComponent', () => {
     expect(mockAuthService.signUp).toHaveBeenCalledWith(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
   });
 
-  it('should redirect to dashboard if login() with email and password is successful', () => {
-    mockAuthService.login.and.returnValue(mockLoginResponse())
-    component.login(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
+  it('should redirect to dashboard if basicLogin() with email and password is successful', () => {
+    mockAuthService.basicLogin.and.returnValue(mockLoginResponse())
+    component.basicLogin(TestConstants.TEST_EMAIL, TestConstants.TEST_PASSWORD)
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard'])
   });
 
@@ -73,9 +73,9 @@ describe('AuthComponent', () => {
     expect(stateService.authForm()).toBeUndefined();
   })
 
-  it('should reset the state service if the authForm is valid and the login is successful', () => {
+  it('should reset the state service if the authForm is valid and the basicLogin is successful', () => {
     stateService.switchLoginMode()
-    mockAuthService.login.and.returnValue(mockSignUpResponse())
+    mockAuthService.basicLogin.and.returnValue(mockSignUpResponse())
     const form = new NgForm([], []);
     component.onSubmit(form)
     expect(stateService.authForm()).toBeUndefined();
@@ -88,9 +88,9 @@ describe('AuthComponent', () => {
     expect(stateService.authForm()).toEqual(form)
   });
 
-  it('should not reset the state service if the authForm is valid but the login is not successful', () => {
+  it('should not reset the state service if the authForm is valid but the basicLogin is not successful', () => {
     stateService.switchLoginMode()
-    mockAuthService.login.and.returnValue(throwError(() => 'test'))
+    mockAuthService.basicLogin.and.returnValue(throwError(() => 'test'))
     const form = new NgForm([], []);
     component.onSubmit(form)
     expect(stateService.authForm()).toEqual(form)
@@ -129,26 +129,26 @@ describe('AuthComponent', () => {
     expect(stateService.reset).not.toHaveBeenCalled()
   })
 
-  it('should switch the loading state when calling the auth service in login()', async () => {
+  it('should switch the loading state when calling the auth service in basicLogin() via onSubmit()', async () => {
     TestBed.resetTestingModule()
     stateService = jasmine.createSpyObj('authComponentStateService', ['switchLoading', 'isLoginMode', 'reset'])
     await configureTestBed({provide: AuthComponentStateService, useValue: stateService})
 
     stateService.isLoginMode.and.returnValue(true)
-    mockAuthService.login.and.returnValue(mockSignUpResponse())
+    mockAuthService.basicLogin.and.returnValue(mockSignUpResponse())
     const form = new NgForm([], []);
     component.onSubmit(form)
     expect(stateService.switchLoading).toHaveBeenCalledTimes(2)
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard'])
   });
 
-  it('should switch the loading state when calling the auth service in login() with err', async () => {
+  it('should switch the loading state when calling the auth service in basicLogin() via onSubmit() with err', async () => {
     TestBed.resetTestingModule()
     stateService = jasmine.createSpyObj('authComponentStateService', ['switchLoading', 'isLoginMode', 'reset'])
     await configureTestBed({provide: AuthComponentStateService, useValue: stateService})
 
     stateService.isLoginMode.and.returnValue(true)
-    mockAuthService.login.and.returnValue(throwError(() => 'test'))
+    mockAuthService.basicLogin.and.returnValue(throwError(() => 'test'))
     const form = new NgForm([], []);
     component.onSubmit(form)
     expect(stateService.switchLoading).toHaveBeenCalledTimes(2)
@@ -157,7 +157,7 @@ describe('AuthComponent', () => {
 });
 
 async function configureTestBed(stateServiceProvider?: any) {
-  mockAuthService = jasmine.createSpyObj('authService', ['login', 'signUp']);
+  mockAuthService = jasmine.createSpyObj('authService', ['basicLogin', 'signUp']);
   mockRouter = jasmine.createSpyObj('router', ['navigate'])
   let providers: any[] = [
     {provide: AuthService, useValue: mockAuthService},
@@ -179,8 +179,8 @@ async function configureTestBed(stateServiceProvider?: any) {
   fixture.detectChanges();
 }
 
-function mockLoginResponse(): Observable<LoginResponse> {
-  return new Observable<LoginResponse>(subscriber => subscriber.next(TestObjectProvider.loginResponse()));
+function mockLoginResponse(): Observable<BasicLoginResponse> {
+  return new Observable<BasicLoginResponse>(subscriber => subscriber.next(TestObjectProvider.basicLoginResponse()));
 }
 
 function mockSignUpResponse(): Observable<SignUpResponse> {

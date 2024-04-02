@@ -1,4 +1,9 @@
-import {RefreshTokenResponse, LoginResponse, SignUpResponse} from "../core/external/firebase/firebase-api";
+import {
+  RefreshTokenResponse,
+  BasicLoginResponse,
+  SignUpResponse,
+  TokenLoginResponse
+} from "../core/external/firebase/firebase-api";
 import {UserInfo} from "../core/auth/user-info";
 
 export enum TestConstants {
@@ -15,6 +20,7 @@ export enum TestConstants {
   TEST_PROJECT_ID = "testProjectId",
   TEST_USER_ID = "testUserId",
   TEST_GRANT_TYPE = "testGrantType",
+  TEST_SECURE_TOKEN = "testSecureToken",
 }
 
 export class TestObjectProvider {
@@ -29,7 +35,7 @@ export class TestObjectProvider {
     }
   }
 
-  public static loginResponse(): LoginResponse {
+  public static basicLoginResponse(): BasicLoginResponse {
     return {
       email: TestConstants.TEST_EMAIL.toString(),
       expiresInSeconds: TestConstants.TEST_EXPIRED_IN.toString(),
@@ -38,6 +44,14 @@ export class TestObjectProvider {
       kind: TestConstants.TEST_KIND.toString(),
       localId: TestConstants.TEST_LOCAL_ID.toString(),
       refreshToken: TestConstants.TEST_REFRESH_TOKEN.toString(),
+    }
+  }
+
+  public static tokenLoginResponse(): TokenLoginResponse {
+    return {
+      idToken: TestConstants.TEST_SECURE_TOKEN.toString(),
+      refreshToken: TestConstants.TEST_REFRESH_TOKEN.toString(),
+      expiresInSeconds: TestConstants.TEST_EXPIRED_IN.toString()
     }
   }
 

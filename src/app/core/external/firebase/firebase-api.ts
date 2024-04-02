@@ -7,6 +7,11 @@ export interface BasicAuthenticationPayload {
   returnToken: boolean
 }
 
+export interface TokenAuthenticationPayload{
+  token: string
+  returnSecureToken: boolean
+}
+
 export interface RefreshTokenPayload {
   grant_type: string
   refresh_token: string
@@ -25,7 +30,13 @@ export interface SignUpResponse {
   localId: string
 }
 
-export interface LoginResponse {
+export interface TokenLoginResponse{
+  idToken: string
+  refreshToken: string
+  expiresInSeconds: string
+}
+
+export interface BasicLoginResponse {
   idToken: string
   email: string
   refreshToken: string

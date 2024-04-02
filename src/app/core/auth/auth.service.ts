@@ -3,7 +3,7 @@ import {FirebaseApiService} from "../external/firebase/firebase-api.service";
 import {tap} from "rxjs";
 import {AuthStateService} from "./auth-state.service";
 import {UserInfo} from "./user-info";
-import {LoginResponse, SignUpResponse} from "../external/firebase/firebase-api";
+import {BasicLoginResponse, SignUpResponse} from "../external/firebase/firebase-api";
 
 @Injectable({providedIn: "root"})
 export class AuthService {
@@ -26,10 +26,10 @@ export class AuthService {
       )
   }
 
-  login(email: string, password: string) {
+  basicLogin(email: string, password: string) {
     return this._firebaseApiService
-      .login({email: email, password: password, returnToken: true})
-      .pipe(tap((value: LoginResponse) =>
+      .basicLogin({email: email, password: password, returnToken: true})
+      .pipe(tap((value: BasicLoginResponse) =>
           this._authStateService.authenticate(
             this.buildUserInfo(value.idToken, value.email, value.refreshToken, value.expiresInSeconds)
           )

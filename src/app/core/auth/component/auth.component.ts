@@ -39,15 +39,15 @@ export class AuthComponent {
       const email: string = authForm.value.email
       const password: string = authForm.value.password
       if (this.authComponentStateService.isLoginMode()) {
-        this.login(email, password)
+        this.basicLogin(email, password)
       } else {
         this.signUp(email, password)
       }
     }
   }
 
-  login(email: string, password: string) {
-    this.authenticationFlow(this.authService.login(email, password),
+  basicLogin(email: string, password: string) {
+    this.authenticationFlow(this.authService.basicLogin(email, password),
       () => {
         this.authComponentStateService.reset()
         this.router.navigate(['/dashboard'])
