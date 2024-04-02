@@ -1,6 +1,6 @@
 // noinspection JSIgnoredPromiseFromCall
 
-import {Component} from '@angular/core';
+import {Component, Signal} from '@angular/core';
 import {FormsModule, NgForm} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {AuthComponentStateService} from "./auth.component.state.service";
@@ -64,8 +64,8 @@ export class AuthComponent {
     )
   }
 
-  get loginMode(): boolean {
-    return this.authComponentStateService.isLoginMode()
+  get loginMode(): Signal<boolean> {
+    return this.authComponentStateService.isLoginMode
   }
 
   private authenticationFlow(observable: Observable<any>, nextCallback: () => void): void {

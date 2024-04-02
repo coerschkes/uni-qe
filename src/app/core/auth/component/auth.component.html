@@ -9,9 +9,9 @@
     <input type="password" id="password" ngModel name="password" required [minlength]="6"/>
   </div>
   <div>
-    <button [disabled]="!authForm.valid" type="submit"> {{ loginMode ? 'login' : 'sign up' }}</button>
+    <button [disabled]="!authForm.valid" type="submit"> {{ loginMode() ? 'login' : 'sign up' }}</button>
   </div>
 </form>
 <div>
-  <p>or {{ loginMode ? 'sign up' : 'login' }} <a (click)="onSwitchMode()">here</a></p>
+  <p>or {{ loginMode() ? 'sign up' : 'login' }} <a (click)="onSwitchMode()">here</a></p>
 </div>
