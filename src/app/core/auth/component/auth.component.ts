@@ -11,6 +11,17 @@ import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/mater
 import {MatError, MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {MatInput} from "@angular/material/input";
+import {MatDivider} from "@angular/material/divider";
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle
+} from "@angular/material/card";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -33,6 +44,15 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     MatHint,
     MatLabel,
     MatInput,
+    MatDivider,
+    MatCardActions,
+    MatCardFooter,
+    MatProgressBar,
+    MatCardContent,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatCardHeader,
+    MatCard,
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'

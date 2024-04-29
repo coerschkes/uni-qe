@@ -1,6 +1,9 @@
 @use "@angular/material" as mat;
 @use '@angular/material-experimental' as matx;
 @use 'sass:map';
+@use './app/core/auth/component/auth.component-theme' as auth-component;
+
+//@include mat.core();
 
 $light-theme: matx.define-theme();
 $m3-custom: (
@@ -11,10 +14,11 @@ $m3-custom: (
   )
 );
 $dark-theme: matx.define-theme($m3-custom);
+@include auth-component.theme($dark-theme);
 
-html{
+html {
   @include mat.all-component-themes($dark-theme);
-  //background: mat.get-theme-color($dark-theme, surface);
+  background: mat.get-theme-color($dark-theme, surface);
   //background: mat.get-theme-color(mat.$dark-theme-background-palette, mat.$dark-theme-background-palette, "background");
 }
 
